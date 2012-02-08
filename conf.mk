@@ -1,0 +1,15 @@
+VERSION=0.0.2
+PACKAGE=zcs-lib-vnc
+MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
+SECTION=base
+ARCHITECTURE=All
+PRIORITY=optional
+DEPENDS=__NONE__
+DESCRIPTION=Common classes library for VNC packages
+DISTPREFIX=$(TOPDIR)/dist
+DISTDIR=$(DISTPREFIX)/$(PACKAGE)-$(VERSION)
+DISTFILE=$(DISTPREFIX)/$(PACKAGE)-$(VERSION).tar.gz
+JAVA?=java
+JAR?=jar
+JAVAC?=javac
+IMAGE_ROOT=$(TOPDIR)/image

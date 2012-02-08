@@ -1,0 +1,7 @@
+/dist
+_jspc_tmp
+classes
+/image
+/zimlets.list
+*.deb
+/src/vnclib/zcs-lib-vnc-common.jar
