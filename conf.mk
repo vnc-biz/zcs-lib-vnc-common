@@ -1,5 +1,5 @@
 VERSION=0.0.2
-PACKAGE=zcs-lib-vnc
+PACKAGE=zcs-lib-vnc-common
 MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
 SECTION=base
 ARCHITECTURE=All
