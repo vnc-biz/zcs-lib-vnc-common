@@ -12,6 +12,7 @@ public class LocalConfig
 	public String db_password;
 	public String db_port;
 	public String db_user;
+	public String zimbra_home;
 
 	public static LocalConfig get()
 	{
@@ -23,11 +24,12 @@ public class LocalConfig
 		_cf.db_host = "localhost";
 		_cf.db_port = "7306";
 		_cf.db_user = "zimbra";
+		_cf.zimbra_home = "/opt/zimbra";
 
 		String[] cmd = {
 			"/bin/sh",
 			"-c",
-			"/opt/zimbra/bin/zmlocalconfig -s | /bin/grep zimbra_mysql_password | /usr/bin/cut -d\" \" -f 3"};
+			_cf.zimbra_home+"/bin/zmlocalconfig -s | /bin/grep zimbra_mysql_password | /usr/bin/cut -d\" \" -f 3"};
 
 		try
 		{
