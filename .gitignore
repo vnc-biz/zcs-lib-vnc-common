@@ -4,4 +4,4 @@ classes
 /image
 /zimlets.list
 *.deb
-/src/vnclib/zcs-lib-vnc-common.jar
+/src/zcs-lib-vnc-common/zcs-lib-vnc-common.jar
