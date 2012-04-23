@@ -31,6 +31,7 @@ check-1:
 endif
 
 install:	$(JAR_FILE_NAME)
+	@true
 ifeq ($(INSTALL_USER),y)
 	@mkdir -p $(IMAGE_ROOT)/$(ZIMLET_USER_JARDIR)
 	@cp $(JAR_FILE_NAME) $(IMAGE_ROOT)/$(ZIMLET_USER_JARDIR)
