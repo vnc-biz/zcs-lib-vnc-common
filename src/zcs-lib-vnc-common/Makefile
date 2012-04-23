@@ -8,4 +8,9 @@ INSTALL_SERVICE=y
 INSTALL_EXTENSION=y
 INSTALL_LIB=y
 
+ZCS_LIB_JARS=\
+	servlet-api.jar		\
+	zimbrastore.jar		\
+	zimbracommon.jar
+
 include $(TOPDIR)/zcs-java-lib.mk
