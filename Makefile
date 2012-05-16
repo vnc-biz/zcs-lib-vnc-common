@@ -23,25 +23,25 @@ $(DEBIAN_DIR)/control:	control.in
 	@mkdir -p $(IMAGE_ROOT)/DEBIAN
 ifeq ($(DEPENDS),)
 	@cat $< | \
-	    sed -E 's/@PACKAGE@/$(PACKAGE)/' | \
-	    sed -E 's/@VERSION@/$(PACKAGING_VERSION)/' | \
-	    sed -E 's/@MAINTAINER@/$(MAINTAINER)/' | \
-	    sed -E 's/@SECTION@/$(SECTION)/' | \
-	    sed -E 's/@ARCHITECTURE@/$(ARCHITECTURE)/' | \
-	    sed -E 's/@PRIORITY@/$(PRIORITY)/' | \
-	    sed -E 's/@DEPENDS@/$(DEPENDS)/' | \
-	    sed -E 's/@DESCRIPTION@/$(DESCRIPTION)/' | \
-	    grep -vE "^Depends: " > $@
+	    sed -e 's/@PACKAGE@/$(PACKAGE)/' | \
+	    sed -e 's/@VERSION@/$(PACKAGING_VERSION)/' | \
+	    sed -e 's/@MAINTAINER@/$(MAINTAINER)/' | \
+	    sed -e 's/@SECTION@/$(SECTION)/' | \
+	    sed -e 's/@ARCHITECTURE@/$(ARCHITECTURE)/' | \
+	    sed -e 's/@PRIORITY@/$(PRIORITY)/' | \
+	    sed -e 's/@DEPENDS@/$(DEPENDS)/' | \
+	    sed -e 's/@DESCRIPTION@/$(DESCRIPTION)/' | \
+	    grep -ve "^Depends: " > $@
 else
 	@cat $< | \
-	    sed -E 's/@PACKAGE@/$(PACKAGE)/' | \
-	    sed -E 's/@VERSION@/$(PACKAGING_VERSION)/' | \
-	    sed -E 's/@MAINTAINER@/$(MAINTAINER)/' | \
-	    sed -E 's/@SECTION@/$(SECTION)/' | \
-	    sed -E 's/@ARCHITECTURE@/$(ARCHITECTURE)/' | \
-	    sed -E 's/@PRIORITY@/$(PRIORITY)/' | \
-	    sed -E 's/@DEPENDS@/$(DEPENDS)/' | \
-	    sed -E 's/@DESCRIPTION@/$(DESCRIPTION)/' > $@
+	    sed -e 's/@PACKAGE@/$(PACKAGE)/' | \
+	    sed -e 's/@VERSION@/$(PACKAGING_VERSION)/' | \
+	    sed -e 's/@MAINTAINER@/$(MAINTAINER)/' | \
+	    sed -e 's/@SECTION@/$(SECTION)/' | \
+	    sed -e 's/@ARCHITECTURE@/$(ARCHITECTURE)/' | \
+	    sed -e 's/@PRIORITY@/$(PRIORITY)/' | \
+	    sed -e 's/@DEPENDS@/$(DEPENDS)/' | \
+	    sed -e 's/@DESCRIPTION@/$(DESCRIPTION)/' > $@
 endif
 
 clean:
@@ -66,3 +66,5 @@ check-depend:
 
 check_version:
 	@echo "$(PACKAGING_VERSION)"
+
+.PHONY:	$(DEBIAN_DIR)/control
