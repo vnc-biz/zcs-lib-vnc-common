@@ -26,10 +26,12 @@ public class LocalConfig
 		_cf.db_user = "zimbra";
 		_cf.zimbra_home = "/opt/zimbra";
 
-		String[] cmd = {
+		String[] cmd =
+		{
 			"/bin/sh",
 			"-c",
-			_cf.zimbra_home+"/bin/zmlocalconfig -s | /bin/grep zimbra_mysql_password | /usr/bin/cut -d\" \" -f 3"};
+			_cf.zimbra_home+"/bin/zmlocalconfig -s | /bin/grep zimbra_mysql_password | /usr/bin/cut -d\" \" -f 3"
+		};
 
 		try
 		{

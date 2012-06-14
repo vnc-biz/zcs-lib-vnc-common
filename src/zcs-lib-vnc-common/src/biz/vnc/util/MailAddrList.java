@@ -6,21 +6,26 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 
-public class MailAddrList extends ArrayList<String> {
-	public MailAddrList() {
+public class MailAddrList extends ArrayList<String>
+{
+	public MailAddrList()
+	{
 	}
 
-	public MailAddrList(String addrs) {
+	public MailAddrList(String addrs)
+	{
 		addAddressList(addrs);
 	}
 
 	/** add a single address */
-	public void addAddress(String addr) {
+	public void addAddress(String addr)
+	{
 		add(parseAddress(addr));
 	}
 
 	/* parse a single address element and cut out the actual address (remove the name and brackets) */
-	private static String parseAddress(String headerv) {
+	private static String parseAddress(String headerv)
+	{
 		String retValue = null;
 
 		if (headerv.contains("<"))
@@ -31,7 +36,8 @@ public class MailAddrList extends ArrayList<String> {
 		return retValue.replaceAll(",", "").replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "").replaceAll("\r", "");
 	}
 
-	public void addAddressList(String headerv) {
+	public void addAddressList(String headerv)
+	{
 		if (headerv == null)
 			return;
 
@@ -40,7 +46,8 @@ public class MailAddrList extends ArrayList<String> {
 			add(parseAddress(retValue[i]));
 	}
 
-	public static String getDomainPart(String addr) {
+	public static String getDomainPart(String addr)
+	{
 		if (addr == null)
 			return "";
 
@@ -51,7 +58,8 @@ public class MailAddrList extends ArrayList<String> {
 		return splitted[1];
 	}
 
-	public static String getLocalPart(String addr) {
+	public static String getLocalPart(String addr)
+	{
 		if (addr == null)
 			return "";
 

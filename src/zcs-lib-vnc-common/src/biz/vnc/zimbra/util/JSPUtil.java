@@ -24,9 +24,12 @@ public class JSPUtil
 	public static String getAuthToken(HttpServletRequest r)
 	{
 		Cookie cookies [] = r.getCookies();
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if(cookies[i].getName().equals("ZM_AUTH_TOKEN")) {
+		if (cookies != null)
+		{
+			for (int i = 0; i < cookies.length; i++)
+			{
+				if(cookies[i].getName().equals("ZM_AUTH_TOKEN"))
+				{
 					return cookies[i].getValue();
 				}
 			}
@@ -36,7 +39,7 @@ public class JSPUtil
 
 	/* Reading email body via soap requests. */
 	public static ZMailbox getMailbox(HttpServletRequest r)
-		throws ServiceException
+	throws ServiceException
 	{
 		Options opts = new Options();
 		opts.setLocalConfigAuth(true);
