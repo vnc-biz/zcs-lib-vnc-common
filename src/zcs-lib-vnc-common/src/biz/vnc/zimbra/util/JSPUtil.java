@@ -1,6 +1,7 @@
 package biz.vnc.zimbra.util;
 
 import java.util.HashMap;
+import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -89,5 +90,10 @@ public class JSPUtil {
 			}
 		}
 		return propertyMap;
+	}
+
+	public static void uncachedResponse(HttpServletResponse r, String s) throws IOException {
+		nocache(r);
+		r.getWriter().println(s);
 	}
 }
