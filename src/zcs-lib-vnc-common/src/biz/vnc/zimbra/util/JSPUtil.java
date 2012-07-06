@@ -13,6 +13,9 @@ import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.cs.zclient.ZGetMessageParams;
 
 public class JSPUtil
 {
@@ -67,5 +70,14 @@ public class JSPUtil
 		opts.setLocalConfigAuth(true);
 		SoapProvisioning sp = new SoapProvisioning(opts);
 		return ZMailbox.getByAuthToken(getAuthToken(r), SoapProvisioning.getLocalConfigURI());
+	}
+
+	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws Exception{
+		ZMailbox client = JSPUtil.getMailbox(request);
+		ZGetMessageParams params = new ZGetMessageParams();
+		params.setId(msgid);
+		params.setWantHtml(true);
+		ZMessage msg =  client.getMessage(params);
+		return msg;
 	}
 }
