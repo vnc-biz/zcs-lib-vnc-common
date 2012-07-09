@@ -16,6 +16,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZGetMessageParams;
+import java.util.HashMap;
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -69,5 +70,21 @@ public class JSPUtil {
 		params.setWantHtml(true);
 		ZMessage msg =  client.getMessage(params);
 		return msg;
+	}
+	public static HashMap<String,String> getZimletUserProperties(HttpServletRequest r,String zimletName) throws Exception{
+		Account account = JSPUtil.getCurrentAccount(r);
+		return JSPUtil.getZimletUserProperties(account,zimletName);
+	}
+	public static HashMap<String,String> getZimletUserProperties(Account account,String zimletName) {
+		String[] userProperties = account.getZimletUserProperties();
+		HashMap<String,String> propertyMap = new HashMap<String,String>();
+		String[] splitedValue = null;
+		for(String userProperty : userProperties) {
+			splitedValue = userProperty.split(":",3);
+			if(splitedValue[0].equals(zimletName)) {
+				propertyMap.put(splitedValue[1],splitedValue[2]);
+			}
+		}
+		return propertyMap;
 	}
 }
