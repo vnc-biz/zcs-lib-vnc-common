@@ -17,26 +17,20 @@ import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZGetMessageParams;
 
-public class JSPUtil
-{
+public class JSPUtil {
 	/* disable caching of the reply */
-	public static void nocache(HttpServletResponse r)
-	{
+	public static void nocache(HttpServletResponse r) {
 		r.setHeader("Cache-Control","no-cache");
 		r.setHeader("Pragma","no-cache");
 		r.setDateHeader("Expires", 0);
 	}
 
 	/* Reading authentication token from cookie */
-	public static String getAuthToken(HttpServletRequest r)
-	{
+	public static String getAuthToken(HttpServletRequest r) {
 		Cookie cookies [] = r.getCookies();
-		if (cookies != null)
-		{
-			for (int i = 0; i < cookies.length; i++)
-			{
-				if(cookies[i].getName().equals("ZM_AUTH_TOKEN"))
-				{
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if(cookies[i].getName().equals("ZM_AUTH_TOKEN")) {
 					return cookies[i].getValue();
 				}
 			}
@@ -45,34 +39,30 @@ public class JSPUtil
 	}
 
 	public static AuthToken getAuthTokenObj(HttpServletRequest r)
-		throws AuthTokenException
-	{
+	throws AuthTokenException {
 		return AuthToken.getAuthToken(getAuthToken(r));
 	}
 
 	public static String getCurrentAccountID(HttpServletRequest r)
-		throws AuthTokenException
-	{
+	throws AuthTokenException {
 		return getAuthTokenObj(r).getAccountId();
 	}
 
 	public static Account getCurrentAccount(HttpServletRequest r)
-		throws AuthTokenException, ServiceException
-	{
+	throws AuthTokenException, ServiceException {
 		return Provisioning.getInstance().get(Provisioning.AccountBy.id, getCurrentAccountID(r));
 	}
 
 	/* Reading email body via soap requests. */
 	public static ZMailbox getMailbox(HttpServletRequest r)
-	throws ServiceException
-	{
+	throws ServiceException {
 		Options opts = new Options();
 		opts.setLocalConfigAuth(true);
 		SoapProvisioning sp = new SoapProvisioning(opts);
 		return ZMailbox.getByAuthToken(getAuthToken(r), SoapProvisioning.getLocalConfigURI());
 	}
 
-	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws Exception{
+	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws Exception {
 		ZMailbox client = JSPUtil.getMailbox(request);
 		ZGetMessageParams params = new ZGetMessageParams();
 		params.setId(msgid);

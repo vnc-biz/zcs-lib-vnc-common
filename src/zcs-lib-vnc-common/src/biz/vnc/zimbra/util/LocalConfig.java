@@ -3,8 +3,7 @@ package biz.vnc.zimbra.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class LocalConfig
-{
+public class LocalConfig {
 	private static LocalConfig _cf = null;
 
 	public String db_host;
@@ -14,8 +13,7 @@ public class LocalConfig
 	public String db_user;
 	public String zimbra_home;
 
-	public static LocalConfig get()
-	{
+	public static LocalConfig get() {
 		if (_cf != null)
 			return _cf;
 
@@ -26,21 +24,17 @@ public class LocalConfig
 		_cf.db_user = "zimbra";
 		_cf.zimbra_home = "/opt/zimbra";
 
-		String[] cmd =
-		{
+		String[] cmd = {
 			"/bin/sh",
 			"-c",
 			_cf.zimbra_home+"/bin/zmlocalconfig -s | /bin/grep zimbra_mysql_password | /usr/bin/cut -d\" \" -f 3"
 		};
 
-		try
-		{
+		try {
 			Process p = Runtime.getRuntime().exec(cmd);
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			_cf.db_password = br.readLine();
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			System.err.print("Exception in slpassword"+ex);
 			_cf = null;
 			return null;

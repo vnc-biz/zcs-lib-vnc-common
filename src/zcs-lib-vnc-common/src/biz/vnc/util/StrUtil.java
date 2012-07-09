@@ -5,17 +5,13 @@ import java.lang.StringBuffer;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class StrUtil
-{
-	public static String join(Vector<String> s, String delimiter)
-	{
+public class StrUtil {
+	public static String join(Vector<String> s, String delimiter) {
 		StringBuffer buffer = new StringBuffer();
 		Iterator iter = s.iterator();
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			buffer.append(iter.next());
-			if (iter.hasNext())
-			{
+			if (iter.hasNext()) {
 				buffer.append(delimiter);
 			}
 		}
