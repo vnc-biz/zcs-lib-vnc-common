@@ -1,7 +1,7 @@
 package biz.vnc.zimbra.util;
 
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.Properties;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -74,14 +74,14 @@ public class JSPUtil {
 		return msg;
 	}
 
-	public static HashMap<String,String> getZimletUserProperties(HttpServletRequest r,String zimletName) throws Exception {
+	public static Properties getZimletUserProperties(HttpServletRequest r,String zimletName) throws Exception {
 		Account account = JSPUtil.getCurrentAccount(r);
 		return JSPUtil.getZimletUserProperties(account,zimletName);
 	}
 
-	public static HashMap<String,String> getZimletUserProperties(Account account,String zimletName) {
+	public static Properties getZimletUserProperties(Account account,String zimletName) {
 		String[] userProperties = account.getZimletUserProperties();
-		HashMap<String,String> propertyMap = new HashMap<String,String>();
+		Properties propertyMap = new Properties();
 		String[] splitedValue = null;
 		for(String userProperty : userProperties) {
 			splitedValue = userProperty.split(":",3);
