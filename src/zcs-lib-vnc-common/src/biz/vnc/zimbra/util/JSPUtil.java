@@ -63,7 +63,7 @@ public class JSPUtil {
 		return ZMailbox.getByAuthToken(getAuthToken(r), SoapProvisioning.getLocalConfigURI());
 	}
 
-	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws Exception {
+	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws ServiceException {
 		ZMailbox client = JSPUtil.getMailbox(request);
 		ZGetMessageParams params = new ZGetMessageParams();
 		params.setId(msgid);
@@ -71,7 +71,8 @@ public class JSPUtil {
 		ZMessage msg =  client.getMessage(params);
 		return msg;
 	}
-	public static HashMap<String,String> getZimletUserProperties(HttpServletRequest r,String zimletName) throws Exception{
+
+	public static HashMap<String,String> getZimletUserProperties(HttpServletRequest r,String zimletName) throws Exception {
 		Account account = JSPUtil.getCurrentAccount(r);
 		return JSPUtil.getZimletUserProperties(account,zimletName);
 	}
