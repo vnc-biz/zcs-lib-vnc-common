@@ -1,10 +1,11 @@
 package biz.vnc.zimbra.util;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import javax.servlet.http.Cookie;
-
-import com.zimbra.cs.zclient.ZMailbox;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
@@ -13,10 +14,10 @@ import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZGetMessageParams;
-import java.util.HashMap;
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -76,6 +77,7 @@ public class JSPUtil {
 		Account account = JSPUtil.getCurrentAccount(r);
 		return JSPUtil.getZimletUserProperties(account,zimletName);
 	}
+
 	public static HashMap<String,String> getZimletUserProperties(Account account,String zimletName) {
 		String[] userProperties = account.getZimletUserProperties();
 		HashMap<String,String> propertyMap = new HashMap<String,String>();
