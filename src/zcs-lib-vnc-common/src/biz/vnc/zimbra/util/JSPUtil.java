@@ -53,7 +53,10 @@ public class JSPUtil {
 
 	public static Account getCurrentAccount(HttpServletRequest r)
 	throws AuthTokenException, ServiceException {
-		return Provisioning.getInstance().get(Provisioning.AccountBy.id, getCurrentAccountID(r));
+		Options opts = new Options();
+		opts.setLocalConfigAuth(true);
+		SoapProvisioning sp = new SoapProvisioning(opts);
+		return sp.get(Provisioning.AccountBy.id, getCurrentAccountID(r));
 	}
 
 	/* Reading email body via soap requests. */
