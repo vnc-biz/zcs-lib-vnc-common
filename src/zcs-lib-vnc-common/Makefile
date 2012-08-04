@@ -14,4 +14,5 @@ ZCS_LIB_JARS=\
 	zimbrastore.jar		\
 	zimbracommon.jar
 
-include $(TOPDIR)/zcs-java-lib.mk
+include $(TOPDIR)/common.mk
+include $(ZIMBRA_BUILD_ROOT)/extensions-extra/zmpkg/mk/zcs-java-lib.mk
