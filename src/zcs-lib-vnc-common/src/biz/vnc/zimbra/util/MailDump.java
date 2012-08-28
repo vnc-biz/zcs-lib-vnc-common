@@ -1,10 +1,12 @@
 package biz.vnc.zimbra.util;
 
-import java.util.Vector;
+import biz.vnc.zimbra.util.ZLog;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.cs.zclient.ZEmailAddress;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class MailDump {
 	/* dump a zimbra mail as HTML into a string buffer */
@@ -71,5 +73,30 @@ public class MailDump {
 			}
 		}
 		return cc;
+	}
+
+	/* Dump attachment */
+	public static boolean dumpAttachments(ZMessage zm, ZMimePart mp, HashMap<String,HashMap<String,String>> map) {
+		if (mp == null)
+			return false;
+
+		if (!mp.isBody() && mp.getContentDispostion() != null && mp.getContentDispostion().indexOf("attachment") != -1) {
+			try {
+				HashMap<String,String> attachment = new HashMap<String,String>();
+				attachment.put("filename",mp.getFileName());
+				attachment.put("content",new String(ByteUtil.getContent(zm.getMailbox().getRESTResource("?id=" + zm.getId() + "&part=" + mp.getPartName()), 1024),"UTF8"));
+				map.put(mp.getPartName(),attachment);
+				return true;
+			} catch(Exception e) {
+				ZLog.err("vnc-commons", "Exception in MailDump::dumpAttachments()",e);
+				return false;
+			}
+		} else {
+			boolean r = true;
+			for (ZMimePart child : mp.getChildren()) {
+				r &= dumpAttachments(zm,child,map);
+			}
+			return r;
+		}
 	}
 }
