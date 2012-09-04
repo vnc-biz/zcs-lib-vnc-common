@@ -17,4 +17,8 @@ public class StrUtil {
 		}
 		return buffer.toString();
 	}
+
+	public static boolean isBlank(String s) {
+		return ((s==null) || (s.equals("")));
+	}
 }
