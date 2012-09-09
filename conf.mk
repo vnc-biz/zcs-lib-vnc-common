@@ -1,7 +1,7 @@
 VERSION=0.4.0
 PACKAGE=zcs-lib-vnc-common
 MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
-SECTION=base
+SECTION=free/zcs-libs
 ARCHITECTURE=All
 PRIORITY=optional
 DEPENDS=
