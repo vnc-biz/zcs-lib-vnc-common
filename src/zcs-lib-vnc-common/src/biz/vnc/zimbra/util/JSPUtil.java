@@ -1,6 +1,8 @@
 package biz.vnc.zimbra.util;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -98,5 +100,14 @@ public class JSPUtil {
 	public static void uncachedResponse(HttpServletResponse r, String s) throws IOException {
 		nocache(r);
 		r.getWriter().println(s);
+	}
+
+	public static String getServerURLPrefix(HttpServletRequest r)
+	throws MalformedURLException {
+		URL url = new URL(r.getRequestURL().toString());
+		if (url.getPort() == -1)
+			return url.getProtocol()+"://"+url.getHost()+"/";
+		else
+			return url.getProtocol()+"://"+url.getHost()+":"+url.getPort()+"/";
 	}
 }
