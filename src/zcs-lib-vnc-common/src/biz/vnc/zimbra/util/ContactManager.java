@@ -4,19 +4,20 @@ import biz.vnc.util.StrUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZContact;
+import com.zimbra.client.ZMailbox;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZSearchContext;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.client.ZSearchContext;
 import org.json.JSONException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import org.dom4j.QName;
-import com.zimbra.cs.zclient.ZSearchHit;
+import com.zimbra.client.ZSearchHit;
+import com.zimbra.soap.type.SearchSortBy;
 
 public class ContactManager {
 
@@ -75,7 +76,6 @@ public class ContactManager {
 
 	public boolean putContact(HashMap<String, String> attrs)
 	throws ServiceException {
-
 		ZContact c2;
 
 		/* check whether contact is already present - by partneID */
@@ -96,7 +96,7 @@ public class ContactManager {
 	public boolean deleteContact(String contactId,String folderId) throws ServiceException ,JSONException  {
 		ZSearchParams params = new ZSearchParams(contactId);
 		params.setTypes("contact");
-		params.setSortBy(ZMailbox.SearchSortBy.nameAsc);
+		params.setSortBy(SearchSortBy.nameAsc);
 		List<ZSearchHit> zsearchhit = mbx.search(params).getHits();
 		if(zsearchhit.size()>0) {
 for(ZSearchHit zsh : zsearchhit) {

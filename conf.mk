@@ -5,4 +5,4 @@ SECTION=free/zcs-libs
 PRIORITY=optional
 DEPENDS=zcs-core-libs,zcs-lib-gson
 DESCRIPTION=Common classes library for VNC packages
-FORCE_ZIMBRA_BASE=helix
+FORCE_ZIMBRA_BASE=ironmaiden
