@@ -10,12 +10,14 @@ INSTALL_LIB=y
 INSTALL_ZIMLET=y
 
 ZCS_LIB_JARS=\
-	servlet-api.jar		\
-	zimbrastore.jar		\
-	zimbracommon.jar		\
-	json.jar    \
-	zcs-lib-gson.jar    \
+	servlet-api-2.5.jar		\
+	zimbrastore.jar			\
+	json.jar			\
+	zcs-lib-gson.jar		\
 	commons-httpclient-3.1.jar	\
+	zimbracommon.jar		\
+	zimbraclient.jar		\
+	zimbrasoap.jar
 
 include $(TOPDIR)/common.mk
 include $(ZIMBRA_BUILD_ROOT)/extensions-extra/zmpkg/mk/zcs-java-lib.mk
