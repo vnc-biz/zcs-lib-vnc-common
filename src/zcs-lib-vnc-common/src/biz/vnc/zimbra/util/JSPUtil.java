@@ -4,6 +4,14 @@ import biz.vnc.util.StreamUtil;
 import biz.vnc.util.StrUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.zimbra.client.ZGetMessageParams;
+import com.zimbra.client.ZJSONObject;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZMessage.ZMimePart;
+import com.zimbra.client.ZSearchHit;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
@@ -13,13 +21,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
 import com.zimbra.cs.account.ZimbraAuthToken;
-import com.zimbra.cs.zclient.ZGetMessageParams;
-import com.zimbra.cs.zclient.ZJSONObject;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
-import com.zimbra.cs.zclient.ZSearchHit;
-import com.zimbra.cs.zclient.ZSearchParams;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -83,7 +84,7 @@ public class JSPUtil {
 		Options opts = new Options();
 		opts.setLocalConfigAuth(true);
 		SoapProvisioning sp = new SoapProvisioning(opts);
-		return sp.get(Provisioning.AccountBy.id, getCurrentAccountID(r));
+		return sp.get(AccountBy.id, getCurrentAccountID(r));
 	}
 
 	public static String getCurrentAccountEmail(HttpServletRequest r)
