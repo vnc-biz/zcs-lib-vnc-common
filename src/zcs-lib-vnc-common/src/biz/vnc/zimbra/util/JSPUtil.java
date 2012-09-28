@@ -4,6 +4,8 @@ import biz.vnc.util.StrUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,30 +21,34 @@ import javax.servlet.ServletContext;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
-import com.zimbra.cs.zclient.ZGetMessageParams;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.PostMethod;
+import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZMessage.ZMimePart;
+import com.zimbra.client.ZGetMessageParams;
+import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zimbra.cs.account.ZimbraAuthToken;
-import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.client.ZSearchParams;
 import java.util.TimeZone;
-import com.zimbra.cs.zclient.ZSearchHit;
+import com.zimbra.client.ZSearchHit;
 import java.util.List;
-import com.zimbra.cs.zclient.ZJSONObject;
+import com.zimbra.client.ZJSONObject;
 import org.json.JSONException;
 import java.util.Vector;
 
@@ -82,7 +88,7 @@ public class JSPUtil {
 		Options opts = new Options();
 		opts.setLocalConfigAuth(true);
 		SoapProvisioning sp = new SoapProvisioning(opts);
-		return sp.get(Provisioning.AccountBy.id, getCurrentAccountID(r));
+		return sp.get(AccountBy.id, getCurrentAccountID(r));
 	}
 
 	public static String getCurrentAccountEmail(HttpServletRequest r)
