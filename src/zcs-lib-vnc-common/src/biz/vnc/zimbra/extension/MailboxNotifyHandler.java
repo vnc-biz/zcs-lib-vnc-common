@@ -105,6 +105,15 @@ for (ModificationKey mk : mods.deleted.keySet()) {
 	}
 
 	@Override
+	public void notify(MailboxListener.ChangeNotification notification) {
+		handleMailboxChange(
+		    notification.mailboxAccount.getId(),
+		    notification.mods,
+		    notification.ctxt,
+		    notification.lastChangeId
+		);
+	}
+
 	public void handleMailboxChange(String accountId, PendingModifications mods, OperationContext ctx, int lastChangeId) {
 		handleCreate(accountId, mods, ctx, lastChangeId);
 		handleModify(accountId, mods, ctx, lastChangeId);
