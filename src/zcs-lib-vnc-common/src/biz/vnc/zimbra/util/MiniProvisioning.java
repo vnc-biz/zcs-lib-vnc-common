@@ -6,8 +6,8 @@ import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.DistributionList;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.DistributionListBy;
+import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.DistributionListBy;
 import com.zimbra.cs.account.ZimbraAuthToken;
 
 public class MiniProvisioning {

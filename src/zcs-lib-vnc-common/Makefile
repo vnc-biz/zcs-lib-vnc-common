@@ -13,6 +13,8 @@ ZCS_LIB_JARS=\
 	servlet-api.jar			\
 	zimbrastore.jar			\
 	zimbracommon.jar		\
+	zimbraclient.jar		\
+	zimbrasoap.jar			\
 	json.jar			\
 	zcs-lib-gson.jar		\
 	commons-httpclient.jar		\
