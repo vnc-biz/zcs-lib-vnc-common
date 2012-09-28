@@ -2,9 +2,9 @@ package biz.vnc.zimbra.util;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZMessage.ZMimePart;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
