@@ -8,3 +8,4 @@ DEPENDS=
 DESCRIPTION=Common classes library for VNC packages
 REDMINE_UPLOAD_PROJECT=zcs-lib-vnc-common
 REDMINE_UPLOAD_URL=https://redmine.vnc.biz/redmine/
+FORCE_ZIMBRA_BASE=ironmaiden

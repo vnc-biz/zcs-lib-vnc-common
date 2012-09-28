@@ -2,9 +2,9 @@ package biz.vnc.zimbra.util;
 
 import biz.vnc.zimbra.util.ZLog;
 import com.zimbra.common.util.ByteUtil;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZMessage.ZMimePart;
 import java.util.HashMap;
 import java.util.Vector;
 
