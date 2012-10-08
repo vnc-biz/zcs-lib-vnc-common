@@ -31,7 +31,7 @@ public class MailDump {
 				sb.append(mp.getContent());
 			return true;
 		} else {
-			for (ZMimePart child : mp.getChildren()) {
+for (ZMimePart child : mp.getChildren()) {
 				if (dumpBodyHTML(child,sb))
 					return true;
 			}
@@ -43,7 +43,7 @@ public class MailDump {
 	public static Vector<String> getFrom(ZMessage msg) {
 		Vector<String> from = new Vector<String>();
 
-		for(ZEmailAddress email : msg.getEmailAddresses()) {
+for(ZEmailAddress email : msg.getEmailAddresses()) {
 			if(ZEmailAddress.EMAIL_TYPE_FROM.equals(email.getType())) {
 				from.add(email.getAddress());
 			}
@@ -55,7 +55,7 @@ public class MailDump {
 	public static Vector<String> getTo(ZMessage msg) {
 		Vector<String> to = new Vector<String>();
 
-		for(ZEmailAddress email : msg.getEmailAddresses()) {
+for(ZEmailAddress email : msg.getEmailAddresses()) {
 			if(ZEmailAddress.EMAIL_TYPE_TO.equals(email.getType())) {
 				to.add(email.getAddress());
 			}
@@ -67,7 +67,7 @@ public class MailDump {
 	public static Vector<String> getCC(ZMessage msg) {
 		Vector<String> cc = new Vector<String>();
 
-		for(ZEmailAddress email : msg.getEmailAddresses()) {
+for(ZEmailAddress email : msg.getEmailAddresses()) {
 			if(ZEmailAddress.EMAIL_TYPE_CC.equals(email.getType())) {
 				cc.add(email.getAddress());
 			}
@@ -93,7 +93,7 @@ public class MailDump {
 			}
 		} else {
 			boolean r = true;
-			for (ZMimePart child : mp.getChildren()) {
+for (ZMimePart child : mp.getChildren()) {
 				r &= dumpAttachments(zm,child,map);
 			}
 			return r;

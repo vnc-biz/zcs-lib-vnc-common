@@ -24,8 +24,7 @@ public class StrUtil {
 		return ((s==null) || (s.equals("")));
 	}
 
-	public static String bin2hex(byte[] b)
-	{
+	public static String bin2hex(byte[] b) {
 		if (b==null)
 			return "";
 
@@ -37,16 +36,12 @@ public class StrUtil {
 		return hexString.toString();
 	}
 
-	public static String md5_hash_hex(String s)
-	{
-		try
-		{
+	public static String md5_hash_hex(String s) {
+		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(s.getBytes());
 			return bin2hex(md.digest());
-		}
-		catch (java.security.NoSuchAlgorithmException e)
-		{
+		} catch (java.security.NoSuchAlgorithmException e) {
 			return "";
 		}
 	}
