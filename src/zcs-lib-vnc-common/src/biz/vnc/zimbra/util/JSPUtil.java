@@ -1,5 +1,6 @@
 package biz.vnc.zimbra.util;
 
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,6 +8,7 @@ import java.util.Properties;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletContext;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
@@ -88,7 +90,7 @@ public class JSPUtil {
 		String[] userProperties = account.getZimletUserProperties();
 		Properties propertyMap = new Properties();
 		String[] splitedValue = null;
-for(String userProperty : userProperties) {
+		for(String userProperty : userProperties) {
 			splitedValue = userProperty.split(":",3);
 			if(splitedValue[0].equals(zimletName)) {
 				propertyMap.put(splitedValue[1],splitedValue[2]);
@@ -109,5 +111,21 @@ for(String userProperty : userProperties) {
 			return url.getProtocol()+"://"+url.getHost()+"/";
 		else
 			return url.getProtocol()+"://"+url.getHost()+":"+url.getPort()+"/";
+	}
+
+	public static Properties getZimletTranslationProperties(ServletContext application,String zimletName) throws Exception {
+		String fileName = "/" + zimletName + "/" + zimletName +  ".properties";
+		InputStream is = null;
+		try {
+			is = application.getResourceAsStream(fileName);
+			if(is == null) {
+				throw new Exception("File not found");
+			}
+		} catch(Exception e) {
+			return null;
+		}
+		Properties prop = new Properties();
+		prop.load(is);
+		return prop;
 	}
 }
