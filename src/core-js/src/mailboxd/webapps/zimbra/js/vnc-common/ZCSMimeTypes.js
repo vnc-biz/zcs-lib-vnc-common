@@ -1,13 +1,9 @@
-/*
-	http://www.vnc.biz 
-	Copyright 2012, VNC - Virtual Network Consult GmbH
-	Released under GPL Licenses. 
-*/
 
-AlfMimeTable = function() {
+ZCSMimeTable = function() {
 };
 
-AlfMimeTable.list = ["text/javascript",
+ZCSMimeTable.list = [
+"text/javascript",
 "application/x-javascript",
 "application/vnd.oasis.opendocument.text",
 "application/vnd.oasis.opendocument.text-template",
