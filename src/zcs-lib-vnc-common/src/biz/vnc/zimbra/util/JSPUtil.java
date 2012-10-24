@@ -63,6 +63,14 @@ public class JSPUtil {
 		return sp.get(Provisioning.AccountBy.id, getCurrentAccountID(r));
 	}
 
+	public static String getCurrentAccountEmail(HttpServletRequest r)
+	throws AuthTokenException, ServiceException {
+		Account acc = getCurrentAccount(r);
+		if (acc == null)
+			return null;
+		return acc.getMail();
+	}
+
 	/* Reading email body via soap requests. */
 	public static ZMailbox getMailbox(HttpServletRequest r)
 	throws ServiceException {
