@@ -33,7 +33,7 @@ public class MiniProvisioning {
 		return new ZimbraAuthToken(getAccountByName(username)).getEncoded();
 	}
 
-	public String[] getMembers(String dlName)
+	public static String[] getMembers(String dlName)
 	throws ServiceException {
 		DistributionList dlist=getProv().get(DistributionListBy.name,dlName);
 
