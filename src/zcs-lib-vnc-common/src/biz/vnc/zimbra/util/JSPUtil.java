@@ -90,7 +90,7 @@ public class JSPUtil {
 		String[] userProperties = account.getZimletUserProperties();
 		Properties propertyMap = new Properties();
 		String[] splitedValue = null;
-		for(String userProperty : userProperties) {
+for(String userProperty : userProperties) {
 			splitedValue = userProperty.split(":",3);
 			if(splitedValue[0].equals(zimletName)) {
 				propertyMap.put(splitedValue[1],splitedValue[2]);
