@@ -1,8 +1,22 @@
 
 if (AjxPackage.define("vnc.common.mimetypes")) {
 
-vnc.common.mimetypes = function() {
-};
+    if (vnc == undefined) {
+        vnc = function() {
+        };
+    }
+
+    if (vnc.common == undefined) {
+        vnc.common = function() {
+        };
+    }
+
+    if (vnc.common.mimetypes == undefined) {
+        vnc.common.mimetypes = function() {
+        };
+    }
+
+    if (vnc.common.mimetypes.list == undefined) {
 
 vnc.common.mimetypes.list = [
 "text/javascript",
@@ -42,4 +56,5 @@ vnc.common.mimetypes.list = [
 "image/bmp"
 ];
 
+    }
 }
