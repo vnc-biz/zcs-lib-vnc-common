@@ -45,4 +45,21 @@ public class StrUtil {
 			return "";
 		}
 	}
+
+	/* sanitizes a filename so it may not have any ../ and no leading /
+	   it does NOT guarantee that a filename with these patters will
+	   be valid after sanitizing
+	*/
+	public static String sanitizeFilename(String fn) {
+		if ((fn == null) || fn.equals("") || fn.equals("/"))
+			return "";
+
+		String s = null;
+		String l[] = fn.split("/");
+		for (int x=0; x<l.length; x++) {
+			if ((l[x] != null) && (!l[x].equals("")) && (!l[x].equals(".")) && (!l[x].equals("..")))
+				s = (s==null) ? l[x] : s+"/"+l[x];
+		}
+		return s;
+	}
 }
