@@ -1,7 +1,11 @@
 package biz.vnc.zimbra.util;
 
+import biz.vnc.util.StreamUtil;
+import biz.vnc.util.StrUtil;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
@@ -135,5 +139,20 @@ for(String userProperty : userProperties) {
 		Properties prop = new Properties();
 		prop.load(is);
 		return prop;
+	}
+
+	public static InputStream getZimbraFile_stream(HttpServletRequest r, String name)
+	throws IOException {
+		String requestURL = getServerURLPrefix(r) + "service/home/~/?auth=co&loc=" + StrUtil.sanitizeFilename(name);
+
+		HttpURLConnection conn = (HttpURLConnection) new URL(requestURL).openConnection();
+		conn.setRequestProperty("Cookie","ZM_AUTH_TOKEN=" + getAuthToken(r));
+		conn.connect();
+		return conn.getInputStream();
+	}
+
+	public static byte[] getZimbraFile_bytes(HttpServletRequest r, String name)
+	throws IOException {
+		return StreamUtil.readBytes(getZimbraFile_stream(r, name));
 	}
 }
