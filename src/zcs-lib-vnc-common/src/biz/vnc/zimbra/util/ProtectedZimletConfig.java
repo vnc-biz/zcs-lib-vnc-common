@@ -22,7 +22,7 @@ public class ProtectedZimletConfig {
 			while (rs.next()) {
 				String name = rs.getString("property");
 				String value = rs.getString("value");
-				if ((name != null) && (!name.equals("")))
+				if ((name != null) && (!name.equals("")) && (value != null) && (!value.equals("")))
 					pr.setProperty(name, value);
 			}
 			return pr;
