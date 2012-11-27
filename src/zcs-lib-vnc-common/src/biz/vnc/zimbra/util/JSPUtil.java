@@ -5,6 +5,9 @@ import biz.vnc.util.StrUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,12 +24,15 @@ import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
-import com.zimbra.common.auth.ZAuthToken;
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZGetMessageParams;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.PostMethod;
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -154,5 +160,28 @@ for(String userProperty : userProperties) {
 	public static byte[] getZimbraFile_bytes(HttpServletRequest r, String name)
 	throws IOException {
 		return StreamUtil.readBytes(getZimbraFile_stream(r, name));
+	}
+
+	public static String uploadZimbraFile(HttpServletRequest request, InputStream is, String filename)
+	throws FileNotFoundException, IOException {
+		File downloadFile = new File("/tmp/_zimbra_upload_" + Math.random() * 5000);
+		FileOutputStream fos = new FileOutputStream(downloadFile);
+		int data = -1;
+		while ((data = is.read()) != -1) {
+			fos.write(data);
+		}
+		fos.close();
+
+		HttpClient uploadClient = new HttpClient();
+		PostMethod filePost = new PostMethod(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()  + "/service/upload?fmt=raw");
+		Part[] parts = {
+			new FilePart("_attFile_",filename, downloadFile)
+		};
+		filePost.setRequestEntity(new MultipartRequestEntity(parts, filePost.getParams()));
+		filePost.setRequestHeader("Cookie", "ZM_AUTH_TOKEN=" + getAuthToken(request));
+		uploadClient.executeMethod(filePost);
+		String result = filePost.getResponseBodyAsString();
+		downloadFile.delete();
+		return result;
 	}
 }

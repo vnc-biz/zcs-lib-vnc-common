@@ -12,7 +12,8 @@ INSTALL_ZIMLET=y
 ZCS_LIB_JARS=\
 	servlet-api.jar		\
 	zimbrastore.jar		\
-	zimbracommon.jar
+	zimbracommon.jar		\
+	commons-httpclient-3.1.jar	\
 
 include $(TOPDIR)/common.mk
 include $(ZIMBRA_BUILD_ROOT)/extensions-extra/zmpkg/mk/zcs-java-lib.mk
