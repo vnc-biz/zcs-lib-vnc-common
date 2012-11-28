@@ -147,6 +147,25 @@ for(String userProperty : userProperties) {
 		return prop;
 	}
 
+	public static Properties getZimletTranslationProperties(ServletContext application,String zimletName, String locale) {
+		Properties prop = new Properties();
+
+		try {
+			prop.load(application.getResourceAsStream("/"+zimletName+"/"+zimletName+"_"+locale+".properties"));
+			return prop;
+		} catch (Exception e) {
+			ZLog.err("JSPUtil", "failed to load zimlet locales for \""+zimletName+"\" => \""+locale+"\" ... loading default");
+		}
+
+		try {
+			prop.load(application.getResourceAsStream("/"+zimletName+"/"+zimletName+"_"+locale+".properties"));
+			return prop;
+		} catch (Exception e) {
+			ZLog.err("JSPUtil", "failed to load zimlet default locales for \""+zimletName+"\"");
+			return prop;
+		}
+	}
+
 	public static InputStream getZimbraFile_stream(HttpServletRequest r, String name)
 	throws IOException {
 		String requestURL = getServerURLPrefix(r) + "service/home/~/?auth=co&loc=" + StrUtil.sanitizeFilename(name);
