@@ -2,18 +2,15 @@
 if (AjxPackage.define("vnc.common.mimetypes")) {
 
     if (vnc == undefined) {
-        vnc = function() {
-        };
+        var vnc = {};
     }
 
     if (vnc.common == undefined) {
-        vnc.common = function() {
-        };
+        vnc.common = {}; 
     }
 
     if (vnc.common.mimetypes == undefined) {
-        vnc.common.mimetypes = function() {
-        };
+        vnc.common.mimetypes = {}; 
     }
 
     if (vnc.common.mimetypes.list == undefined) {
