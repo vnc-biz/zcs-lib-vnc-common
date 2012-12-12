@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Properties;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -202,5 +203,27 @@ for(String userProperty : userProperties) {
 		String result = filePost.getResponseBodyAsString();
 		downloadFile.delete();
 		return result;
+	}
+
+	public static byte [] getRawMail(HttpServletRequest request, String msgid) {
+		int rowlineLength = 72;
+		StringBuffer buffer = new StringBuffer();
+		try {
+			URL requestURL = new URL(getServerURLPrefix(request)+"service/home/~/?auth=qp&id="+URLEncoder.encode(msgid,"UTF-8")+"&zauthtoken="+URLEncoder.encode(getAuthToken(request),"UTF-8"));
+			HttpURLConnection conn = (HttpURLConnection)requestURL.openConnection();
+			conn.connect();
+			InputStream rawmail = conn.getInputStream();
+			int i=0;
+			byte[] rawmailbuffer = new byte[rowlineLength/4*3];
+			while ((i=rawmail.read(rawmailbuffer))!=-1) {
+				buffer.append(new String(rawmailbuffer));
+				rawmailbuffer = null;
+				rawmailbuffer = new byte[rowlineLength/4*3];
+			}
+			rawmail.close();
+		} catch(Exception e) {
+			ZLog.err("Plone-Connector","Error in RowEmailData",e);
+		}
+		return new String(buffer).getBytes();
 	}
 }
