@@ -1,4 +1,4 @@
-if (AjxPackage.define("vnc.extjs.extjs-all")) {
+if (AjxPackage.define("vnc.extjs.ext-all")) {
 /*
 This file is part of Ext JS 4.1
 
