@@ -1,5 +1,4 @@
 package biz.vnc.zimbra.util;
-
 import biz.vnc.util.StreamUtil;
 import biz.vnc.util.StrUtil;
 import java.io.ByteArrayOutputStream;
@@ -34,6 +33,18 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.PostMethod;
+
+import java.util.ArrayList;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.zclient.ZSearchParams;
+import java.util.TimeZone;
+import com.zimbra.cs.zclient.ZSearchHit;
+import java.util.List;
+import com.zimbra.cs.zclient.ZJSONObject;
+import org.json.JSONException;
+import java.util.Vector;
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -225,5 +236,95 @@ for(String userProperty : userProperties) {
 			ZLog.err("Plone-Connector","Error in RowEmailData",e);
 		}
 		return new String(buffer).getBytes();
+	}
+
+	public static List<String> fetchAppointmentByUser(String userId, String apptId) throws JSONException, AuthTokenException, ServiceException {
+		Account account = null;
+		Options options = new Options();
+		options.setLocalConfigAuth(true);
+		SoapProvisioning provisioning = new SoapProvisioning(options);
+		JsonObject resultData = new JsonObject();
+		account = provisioning.getAccount(userId);
+		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
+		String eAuthToken = authToken.getEncoded();
+		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
+		ZSearchParams searchParam = new ZSearchParams("item:"+apptId);
+		searchParam.setTypes(ZSearchParams.TYPE_APPOINTMENT);
+		searchParam.setTimeZone(TimeZone.getDefault());
+		List<ZSearchHit> result = mailbox.search(searchParam).getHits();
+		List<String> allAppointmentResult = new ArrayList<String>();
+for(ZSearchHit res: result) {
+			allAppointmentResult.add(res.toZJSONObject().put("organizer", userId).toString());
+		}
+		return allAppointmentResult;
+	}
+
+	public static List<String> fetchTaskByUser(String userId, String taskId) throws JSONException, AuthTokenException, ServiceException {
+		Account account = null;
+		Options options = new Options();
+		options.setLocalConfigAuth(true);
+		SoapProvisioning provisioning = new SoapProvisioning(options);
+		account = provisioning.getAccount(userId);
+		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
+		String eAuthToken = authToken.getEncoded();
+		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
+		ZSearchParams searchParam = new ZSearchParams("item:"+taskId);
+		searchParam.setTypes(ZSearchParams.TYPE_TASK);
+		searchParam.setTimeZone(TimeZone.getDefault());
+		List<ZSearchHit> result = mailbox.search(searchParam).getHits();
+		List<String> allTaskResult = new ArrayList<String>();
+for(ZSearchHit res: result) {
+			allTaskResult.add(res.toZJSONObject().put("organizer", userId).toString());
+		}
+		return allTaskResult;
+	}
+
+	public static List<String> fetchMailByUser(String userId, String msgId) throws JSONException, AuthTokenException, ServiceException {
+		Account account = null;
+		Options options = new Options();
+		options.setLocalConfigAuth(true);
+		SoapProvisioning provisioning = new SoapProvisioning(options);
+		account = provisioning.getAccount(userId);
+		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
+		String eAuthToken = authToken.getEncoded();
+		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
+		ZSearchParams searchParam = new ZSearchParams("item:"+msgId);
+		searchParam.setTypes(ZSearchParams.TYPE_MESSAGE);
+		searchParam.setTimeZone(TimeZone.getDefault());
+		List<ZSearchHit> result = mailbox.search(searchParam).getHits();
+		List<String> allMailResult = new ArrayList<String>();
+for(ZSearchHit res: result) {
+			ZMessage msg = mailbox.getMessageById(res.getId().toString());
+			Vector<String> to =  MailDump.getTo(msg);
+			Vector<String> from =  MailDump.getFrom(msg);
+			ZJSONObject zjsonObject = new ZJSONObject();
+			zjsonObject = res.toZJSONObject();
+			zjsonObject.put("to", to.get(0).toString());
+			zjsonObject.put("from", from.get(0).toString());
+			zjsonObject.put("userId", userId);
+			allMailResult.add(zjsonObject.toString());
+		}
+		return allMailResult;
+	}
+
+	public static String fetchMailBodyByUser(String userId, String mailId) throws JSONException, AuthTokenException, ServiceException {
+		StringBuffer stringBuffer = new StringBuffer();
+		try {
+			Account account = null;
+			Options options = new Options();
+			options.setLocalConfigAuth(true);
+			SoapProvisioning provisioning = new SoapProvisioning(options);
+			account = provisioning.getAccount(userId);
+			ZimbraAuthToken authToken = new ZimbraAuthToken(account);
+			String eAuthToken = authToken.getEncoded();
+			ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
+			ZMessage msg = mailbox.getMessageById(mailId);
+			Boolean resp =  MailDump.dumpBodyHTML(msg, stringBuffer);
+		} catch (ServiceException e) {
+			ZLog.err("VNC Common","Error in JSPUtil Class", e);
+		} catch (AuthTokenException e) {
+			ZLog.err("VNC Common","Error in JSPUtil Class", e);
+		}
+		return stringBuffer.toString();
 	}
 }

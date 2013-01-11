@@ -13,6 +13,8 @@ ZCS_LIB_JARS=\
 	servlet-api.jar		\
 	zimbrastore.jar		\
 	zimbracommon.jar		\
+	json.jar    \
+	zcs-lib-gson.jar    \
 	commons-httpclient-3.1.jar	\
 
 include $(TOPDIR)/common.mk
