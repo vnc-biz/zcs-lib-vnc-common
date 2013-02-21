@@ -327,4 +327,13 @@ for(ZSearchHit res: result) {
 		}
 		return stringBuffer.toString();
 	}
+
+	public static MailInfo getMailInfo(HttpServletRequest request, String msgid) throws ServiceException {
+		ZMailbox mbox = JSPUtil.getMailbox(request);
+		ZGetMessageParams params = new ZGetMessageParams();
+		params.setId(msgid);
+		params.setWantHtml(true);
+		ZMessage msg = mbox.getMessage(params);
+		return new MailInfo(mbox, msg, msgid);
+	}
 }
