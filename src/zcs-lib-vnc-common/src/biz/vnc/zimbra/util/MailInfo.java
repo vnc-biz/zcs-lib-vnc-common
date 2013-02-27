@@ -62,7 +62,7 @@ public class MailInfo {
 	public HashMap<String,String> getAttachments() throws ServiceException {
 		HashMap<String,String> attachmentMap = new HashMap<String,String>();
 		if (!msg.hasAttachment())
-			return null;
+			return attachmentMap;
 
 		mailAttachments(msg.getMimeStructure(), attachmentMap);
 		return attachmentMap;
