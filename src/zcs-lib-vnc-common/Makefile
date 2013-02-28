@@ -16,6 +16,7 @@ ZCS_LIB_JARS=\
 	json.jar    \
 	zcs-lib-gson.jar    \
 	commons-httpclient-3.1.jar	\
+	commons-codec.jar   
 
 include $(TOPDIR)/common.mk
 include $(ZIMBRA_BUILD_ROOT)/extensions-extra/zmpkg/mk/zcs-java-lib.mk

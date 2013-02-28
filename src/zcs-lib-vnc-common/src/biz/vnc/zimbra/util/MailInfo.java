@@ -9,7 +9,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
-
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import org.apache.commons.codec.binary.Base64;
 public class MailInfo {
 	public ZMessage msg = null;
 	public ZMailbox mbox = null;
@@ -74,9 +76,19 @@ public class MailInfo {
 
 		if(!mp.isBody() && mp.getContentDispostion() != null && mp.getContentDispostion().indexOf("attachment") != -1) {
 			try {
+				InputStream is = mbox.getRESTResource("?id="+msg_id+"&part="+mp.getPartName());
+				int tmp;
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				while((tmp=is.read())!=-1) {
+					os.write(tmp);
+				}
+				os.flush();
+				byte [] buff = os.toByteArray();
+				os.close();
+				is.close();
 				map.put(
 				    mp.getFileName(),
-				    new String(ByteUtil.getContent(mbox.getRESTResource("?id="+msg_id+"&part="+mp.getPartName()), 1024),"UTF8")
+				    new String(Base64.encodeBase64(buff))
 				);
 			} catch(Exception e) {
 				ZLog.err("MailInfo","failed to retrieve mail attachement", e);
