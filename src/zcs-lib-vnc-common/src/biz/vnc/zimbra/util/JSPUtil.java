@@ -217,25 +217,25 @@ for(String userProperty : userProperties) {
 	}
 
 	public static byte [] getRawMail(HttpServletRequest request, String msgid) {
-		int rowlineLength = 72;
-		StringBuffer buffer = new StringBuffer();
+		byte[] buffer = null;
 		try {
 			URL requestURL = new URL(getServerURLPrefix(request)+"service/home/~/?auth=qp&id="+URLEncoder.encode(msgid,"UTF-8")+"&zauthtoken="+URLEncoder.encode(getAuthToken(request),"UTF-8"));
 			HttpURLConnection conn = (HttpURLConnection)requestURL.openConnection();
 			conn.connect();
 			InputStream rawmail = conn.getInputStream();
+			ByteArrayOutputStream arrayStream = new ByteArrayOutputStream();
 			int i=0;
-			byte[] rawmailbuffer = new byte[rowlineLength/4*3];
-			while ((i=rawmail.read(rawmailbuffer))!=-1) {
-				buffer.append(new String(rawmailbuffer));
-				rawmailbuffer = null;
-				rawmailbuffer = new byte[rowlineLength/4*3];
+			while ((i=rawmail.read())!=-1) {
+				arrayStream.write(i);
 			}
 			rawmail.close();
+			arrayStream.flush();
+			buffer = arrayStream.toByteArray();
+			arrayStream.close();
 		} catch(Exception e) {
 			ZLog.err("Plone-Connector","Error in RowEmailData",e);
 		}
-		return new String(buffer).getBytes();
+		return buffer;
 	}
 
 	public static List<String> fetchAppointmentByUser(String userId, String apptId) throws JSONException, AuthTokenException, ServiceException {
