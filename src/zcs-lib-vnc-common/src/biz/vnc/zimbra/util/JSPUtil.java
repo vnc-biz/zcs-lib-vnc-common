@@ -1,6 +1,25 @@
 package biz.vnc.zimbra.util;
+
 import biz.vnc.util.StreamUtil;
 import biz.vnc.util.StrUtil;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.soap.SoapProvisioning;
+import com.zimbra.cs.account.soap.SoapProvisioning.Options;
+import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.zclient.ZGetMessageParams;
+import com.zimbra.cs.zclient.ZJSONObject;
+import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.cs.zclient.ZSearchHit;
+import com.zimbra.cs.zclient.ZSearchParams;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -11,40 +30,22 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
+import java.util.Vector;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletContext;
-import com.zimbra.common.auth.ZAuthToken;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AuthToken;
-import com.zimbra.cs.account.AuthTokenException;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.account.soap.SoapProvisioning.Options;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
-import com.zimbra.cs.zclient.ZGetMessageParams;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.PostMethod;
-
-import java.util.ArrayList;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.zimbra.cs.account.ZimbraAuthToken;
-import com.zimbra.cs.zclient.ZSearchParams;
-import java.util.TimeZone;
-import com.zimbra.cs.zclient.ZSearchHit;
-import java.util.List;
-import com.zimbra.cs.zclient.ZJSONObject;
 import org.json.JSONException;
-import java.util.Vector;
+
 
 public class JSPUtil {
 	/* disable caching of the reply */

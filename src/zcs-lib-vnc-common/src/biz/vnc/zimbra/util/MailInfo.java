@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import org.apache.commons.codec.binary.Base64;
+
 public class MailInfo {
 	public ZMessage msg = null;
 	public ZMailbox mbox = null;

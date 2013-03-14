@@ -1,4 +1,3 @@
-
 package biz.vnc.util;
 
 import java.lang.StringBuffer;

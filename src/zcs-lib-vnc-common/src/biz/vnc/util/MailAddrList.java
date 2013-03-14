@@ -1,9 +1,8 @@
-
 package biz.vnc.util;
 
-import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.lang.StringBuilder;
 
 
 public class MailAddrList extends ArrayList<String> {
