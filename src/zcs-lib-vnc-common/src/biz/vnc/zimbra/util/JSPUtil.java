@@ -47,6 +47,13 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import com.zimbra.cs.service.formatter.ContactCSV;
+import java.util.HashMap;
+import java.util.Map;
+import com.zimbra.client.ZContact;
+
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -327,4 +334,108 @@ for(ZSearchHit res: result) {
 		ZMessage msg = mbox.getMessage(params);
 		return new MailInfo(mbox, msg, msgid);
 	}
+
+	public static String importContact(String filename, HttpServletRequest req) throws ServiceException, FileNotFoundException {
+		try {
+			String auth_token = JSPUtil.getAuthToken(req);
+			String addBook_ID = req.getParameter("id");
+
+			ZMailbox client = ZMailbox.getByAuthToken(auth_token, SoapProvisioning.getLocalConfigURI());
+			BufferedReader in = new BufferedReader(new FileReader(filename));
+			ContactCSV csvObj=new ContactCSV();
+			List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
+			mapList=csvObj.getContacts(in,null,"");
+			ZContact new_ct=null;
+			String[] contactIds= {};
+			//	*********** Code to get Zimbra contacts **********
+			List<ZContact> localContacts=client.getAllContacts(addBook_ID,null,false,null);
+			//	***************** End *********************
+			Map<String, String> remoteAttributes = new HashMap<String, String>();
+			Map<String, String> localAttributes = new HashMap<String, String>();
+			String finalName = "";
+			String firstName = "";
+			String lastName = "";
+			for(int i=0; i<mapList.size(); i++) {
+				boolean ctFlag = true;
+				remoteAttributes=mapList.get(i);
+				String remote_Email = remoteAttributes.get("email");
+				//Check for all blank
+				if(StrUtil.isBlank(remote_Email) && StrUtil.isBlank(remoteAttributes.get("firstName")) && StrUtil.isBlank(remoteAttributes.get("lastName"))) {
+					continue;
+				}
+				if(!StrUtil.isBlank(remoteAttributes.get("firstName"))) {
+					firstName = remoteAttributes.get("firstName");
+				} else {
+					firstName = "";
+				}
+				if(!StrUtil.isBlank(remoteAttributes.get("lastName"))) {
+					lastName = remoteAttributes.get("lastName");
+				} else {
+					lastName = "";
+				}
+				if(StrUtil.isBlank(remote_Email)) {
+					remote_Email ="";
+				}
+				remote_Email = remote_Email.trim();
+				finalName = firstName.trim()+" "+lastName.trim();
+				finalName = finalName.trim();
+				if(localContacts.size() == 0) {
+					new_ct = client.createContact(addBook_ID,null,remoteAttributes);
+					localContacts.add(new_ct);
+				} else {
+					for(int te=0; te<localContacts.size(); te++) {
+						localAttributes = localContacts.get(te).getAttrs();
+						String local_email = localAttributes.get("email");
+						String local_name = localAttributes.get("firstName");
+						String local_last_name = localAttributes.get("lastName");
+						if(StrUtil.isBlank(local_last_name)) {
+							local_last_name = "";
+						}
+						if(StrUtil.isBlank(local_email)) {
+							local_email = "";
+						}
+						if(StrUtil.isBlank(local_name)) {
+							local_name = "";
+						}
+						local_email = local_email.trim();
+						local_name = local_name.trim();
+						if(remote_Email.equals(local_email)) {
+							if(finalName.equals(local_name)) {
+								remoteAttributes.remove("firstName");
+								remoteAttributes.remove("lastName");
+								localContacts.get(te).modify(remoteAttributes,false);
+								ctFlag = false;
+								break;
+							} else {
+								if(!StrUtil.isBlank(finalName) && !StrUtil.isBlank(local_name)) {
+									ctFlag = true;
+								}
+							}
+						} else {
+							if(StrUtil.isBlank(remote_Email) && StrUtil.isBlank(local_email)) {
+								if(finalName.equals(local_name)) {
+									ctFlag = false;
+									break;
+								}
+							} else {
+								ctFlag = true;
+							}
+						}
+					}
+					if(ctFlag == true) {
+						remoteAttributes.remove("firstName");
+						remoteAttributes.remove("lastName");
+						remoteAttributes.put("firstName",finalName);
+						new_ct = client.createContact(addBook_ID,null,remoteAttributes);
+						localContacts.add(new_ct);
+					}
+				}
+			}
+			new File(filename).delete();
+			return "success";
+		} catch (Exception e) {
+			return "fail";
+		}
+	}
+
 }
