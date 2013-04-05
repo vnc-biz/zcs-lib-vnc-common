@@ -61,4 +61,8 @@ public class StrUtil {
 		}
 		return s;
 	}
+
+	public static String null2blank(String s) {
+		return (s == null) ? "" : s;
+	}
 }
