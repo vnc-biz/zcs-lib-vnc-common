@@ -194,27 +194,16 @@ for(String userProperty : userProperties) {
 		return StreamUtil.readBytes(getZimbraFile_stream(r, name));
 	}
 
-	public static String uploadZimbraFile(HttpServletRequest request, InputStream is, String filename)
-	throws FileNotFoundException, IOException {
-		File downloadFile = new File("/tmp/_zimbra_upload_" + Math.random() * 5000);
-		FileOutputStream fos = new FileOutputStream(downloadFile);
-		int data = -1;
-		while ((data = is.read()) != -1) {
-			fos.write(data);
-		}
-		fos.close();
-
-		HttpClient uploadClient = new HttpClient();
-		PostMethod filePost = new PostMethod(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()  + "/service/upload?fmt=raw");
-		Part[] parts = {
-			new FilePart("_attFile_",filename, downloadFile)
-		};
-		filePost.setRequestEntity(new MultipartRequestEntity(parts, filePost.getParams()));
-		filePost.setRequestHeader("Cookie", "ZM_AUTH_TOKEN=" + getAuthToken(request));
-		uploadClient.executeMethod(filePost);
-		String result = filePost.getResponseBodyAsString();
-		downloadFile.delete();
-		return result;
+	public static String uploadZimbraFile(HttpServletRequest request, InputStream input, String filename)
+	throws IOException {
+		return FileStore.upload(
+		    request.getScheme(),
+		    request.getServerName(),
+		    request.getServerPort(),
+		    getAuthToken(request),
+		    input,
+		    filename
+		);
 	}
 
 	public static byte [] getRawMail(HttpServletRequest request, String msgid) {
