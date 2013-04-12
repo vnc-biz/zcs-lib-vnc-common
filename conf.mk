@@ -1,4 +1,4 @@
-VERSION=0.11.5
+VERSION=0.11.6
 PACKAGE=zcs-lib-vnc-common
 MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
 SECTION=free/zcs-libs
