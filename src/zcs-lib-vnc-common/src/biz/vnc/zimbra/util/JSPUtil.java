@@ -212,7 +212,11 @@ for(String userProperty : userProperties) {
 		try {
 			URL requestURL = new URL(getServerURLPrefix(request)+"service/home/~/?auth=qp&id="+URLEncoder.encode(msgid,"UTF-8")+"&zauthtoken="+URLEncoder.encode(getAuthToken(request),"UTF-8"));
 			HttpURLConnection conn = (HttpURLConnection)requestURL.openConnection();
+			conn.setInstanceFollowRedirects(false);
 			conn.connect();
+			if(conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM || conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
+				conn = (HttpURLConnection) new URL(conn.getHeaderField("Location")).openConnection();
+			}
 			InputStream rawmail = conn.getInputStream();
 			ByteArrayOutputStream arrayStream = new ByteArrayOutputStream();
 			int i=0;
