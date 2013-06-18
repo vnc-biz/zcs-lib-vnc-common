@@ -331,4 +331,29 @@ for(ZSearchHit res: result) {
 		ZMessage msg = mbox.getMessage(params);
 		return new MailInfo(mbox, msg, msgid);
 	}
+
+	public static void deleteUploadedFileById(HttpServletRequest request,String id, ZMailbox mbox) {
+		try {
+			if(mbox == null) {
+				mbox = getMailbox(request);
+			}
+			mbox.deleteItem(id,"");
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in deleteUploadedFileById",e);
+		}
+	}
+
+	public static byte[] getFileContentByItemId(HttpServletRequest request, String id, ZMailbox mbox) {
+		try {
+			if(mbox == null) {
+				mbox = getMailbox(request);
+			}
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			mbox.getRESTResource("/?id=" + id,bos,false,null,null,100000,null);
+			return bos.toByteArray();
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in getFileContentByItemId",e);
+		}
+		return null;
+	}
 }
