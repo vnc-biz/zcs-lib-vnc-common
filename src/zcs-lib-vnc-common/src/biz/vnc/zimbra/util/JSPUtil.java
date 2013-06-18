@@ -16,6 +16,7 @@ import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.zclient.ZGetMessageParams;
 import com.zimbra.cs.zclient.ZJSONObject;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZSearchHit;
@@ -329,5 +330,30 @@ for(ZSearchHit res: result) {
 		params.setWantHtml(true);
 		ZMessage msg = mbox.getMessage(params);
 		return new MailInfo(mbox, msg, msgid);
+	}
+
+	public static void deleteUploadedFileById(HttpServletRequest request,String id, ZMailbox mbox) {
+		try {
+			if(mbox == null) {
+				mbox = getMailbox(request);
+			}
+			mbox.deleteItem(id,"");
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in deleteUploadedFileById",e);
+		}
+	}
+
+	public static byte[] getFileContentByItemId(HttpServletRequest request, String id, ZMailbox mbox) {
+		try {
+			if(mbox == null) {
+				mbox = getMailbox(request);
+			}
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			mbox.getRESTResource("/?id=" + id,bos,false,null,null,100000,null);
+			return bos.toByteArray();
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in getFileContentByItemId",e);
+		}
+		return null;
 	}
 }
