@@ -34,6 +34,26 @@ public class ProtectedZimletConfig {
 		return null;
 	}
 
+	static public String getUserProperty(String zimlet, String username, String property) {
+		try {
+			Connection conn = LocalDB.connect(null);
+			PreparedStatement st = conn.prepareStatement("SELECT value FROM "+table+" WHERE zimlet = ? and username = ? AND property = ?");
+			st.setString(1, zimlet);
+			st.setString(2, username);
+			st.setString(3, property);
+			ResultSet rs = st.executeQuery();
+			if (rs.next())
+				return rs.getString("value");
+			else
+				return null;
+		} catch (SQLException e) {
+			ZLog.err("ProtectedZimletConfig", "sqlexception", e);
+		} catch (ClassNotFoundException e) {
+			ZLog.err("ProtectedZimletConfig", "class not found", e);
+		}
+		return null;
+	}
+
 	static public boolean setUserProperty(String zimlet, String username, String property, String value) {
 		try {
 			Connection conn = LocalDB.connect(null);
