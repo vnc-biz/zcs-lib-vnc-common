@@ -16,7 +16,6 @@ import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.zclient.ZGetMessageParams;
 import com.zimbra.cs.zclient.ZJSONObject;
 import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZSearchHit;
