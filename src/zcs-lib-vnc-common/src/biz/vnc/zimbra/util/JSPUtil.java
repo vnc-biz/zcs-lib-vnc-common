@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
@@ -80,10 +81,7 @@ public class JSPUtil {
 
 	public static Account getCurrentAccount(HttpServletRequest r)
 	throws AuthTokenException, ServiceException {
-		Options opts = new Options();
-		opts.setLocalConfigAuth(true);
-		SoapProvisioning sp = new SoapProvisioning(opts);
-		return sp.get(Provisioning.AccountBy.id, getCurrentAccountID(r));
+		return AccessManager.getInstance().getAccount(getAuthTokenObj(r));
 	}
 
 	public static String getCurrentAccountEmail(HttpServletRequest r)
