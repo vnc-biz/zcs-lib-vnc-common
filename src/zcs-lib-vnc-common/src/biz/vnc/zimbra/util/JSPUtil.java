@@ -14,6 +14,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
 import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.util.AccountUtil;
 import com.zimbra.cs.zclient.ZGetMessageParams;
 import com.zimbra.cs.zclient.ZJSONObject;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -93,12 +94,27 @@ public class JSPUtil {
 	}
 
 	/* Reading email body via soap requests. */
+	@Deprecated
 	public static ZMailbox getMailbox(HttpServletRequest r)
 	throws ServiceException {
 		Options opts = new Options();
 		opts.setLocalConfigAuth(true);
 		SoapProvisioning sp = new SoapProvisioning(opts);
 		return ZMailbox.getByAuthToken(getAuthToken(r), SoapProvisioning.getLocalConfigURI());
+	}
+
+	/**
+	 * get the ZMailbox object (via user SOAP) for the current user
+	 *
+	 * @param r		http request w/ auth token cookie
+	 * @result		ZMailbox object for current user's mailbox
+	 */
+	public static ZMailbox getCurrentZMailbox(HttpServletRequest r)
+	throws AuthTokenException, ServiceException {
+		return ZMailbox.getByAuthToken(
+		    JSPUtil.getAuthToken(r),
+		    AccountUtil.getSoapUri(JSPUtil.getCurrentAccount(r))
+		);
 	}
 
 	public static ZMessage getMailAsHTML(HttpServletRequest request,String msgid) throws ServiceException {
