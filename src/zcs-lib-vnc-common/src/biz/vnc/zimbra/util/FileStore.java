@@ -12,7 +12,8 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.PostMethod;
-
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.Header;
 
 public class FileStore {
 	public static String upload_url(String z_scheme, String z_hostname, int z_port) {
@@ -37,6 +38,19 @@ public class FileStore {
 		filePost.setRequestEntity(new MultipartRequestEntity(parts, filePost.getParams()));
 		filePost.setRequestHeader("Cookie", "ZM_AUTH_TOKEN=" + auth_token);
 		uploadClient.executeMethod(filePost);
+		int statuscode = filePost.getStatusCode();
+		ZLog.debug("zcs-lib-vnc-common","FileStore upload status code : "+statuscode);
+		if( statuscode == HttpStatus.SC_MOVED_PERMANENTLY || statuscode == HttpStatus.SC_MOVED_TEMPORARILY ) {
+			Header locationHeader = filePost.getResponseHeader("location");
+			filePost.releaseConnection();
+			ZLog.debug("zcs-lib-vnc-common","FileStore Location header found : "+locationHeader.getValue());
+			if (locationHeader != null) {
+				filePost = new PostMethod(locationHeader.getValue());
+				filePost.setRequestEntity(new MultipartRequestEntity(parts, filePost.getParams()));
+				filePost.setRequestHeader("Cookie", "ZM_AUTH_TOKEN=" + auth_token);
+				uploadClient.executeMethod(filePost);
+			}
+		}
 		String result = filePost.getResponseBodyAsString();
 		downloadFile.delete();
 		return result;
