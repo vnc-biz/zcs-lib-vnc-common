@@ -9,10 +9,19 @@ import com.zimbra.client.ZMailbox;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZSearchContext;
+import org.json.JSONException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
+import org.dom4j.QName;
+import com.zimbra.cs.zclient.ZSearchHit;
 
 public class ContactManager {
 
 	public static final String A_firstName = "firstName";
+	public static final String A_middleName = "middleName";
 	public static final String A_lastName = "lastName";
 	public static final String A_email = "email";
 	public static final String A_homeCity = "homeCity";
@@ -31,13 +40,16 @@ public class ContactManager {
 	private String addrbook_id;
 	private HashMap<String, ZContact> contacts_by_email = new HashMap<String, ZContact>();
 	private HashMap<String, ZContact> contacts_by_fullname = new HashMap<String, ZContact>();
+	public int createrecords = 0;
+	public int deleterecords = 0;
+	public int modifyrecords = 0;
 
 	private static String _fullname(Map<String,String> m) {
 		return (StrUtil.null2blank(m.get(A_firstName)).trim()+" "+StrUtil.null2blank(m.get(A_firstName))).trim();
 	}
 
 	private static String _email(Map<String,String> m) {
-		return StrUtil.null2blank(m.get(A_email)).trim();
+		return m.get(A_email).trim();
 	}
 
 	/* FIXME: maybe the name ('firstName' + 'lastName' vs. 'Name') might be a bit bogus ... ;-o */
@@ -52,9 +64,7 @@ public class ContactManager {
 		for(int x=0; x<contacts.size(); x++) {
 			ZContact walk = contacts.get(x);
 			Map<String, String> localAttributes = walk.getAttrs();
-
 			contacts_by_email.put(_email(localAttributes), walk);
-			contacts_by_fullname.put(_fullname(localAttributes), walk);
 		}
 	}
 
@@ -64,25 +74,33 @@ public class ContactManager {
 		ZContact c2;
 
 		/* check whether contact is already present - by email */
-		if ((c2 = contacts_by_email.get(StrUtil.null2blank(attrs.get(A_email)))) != null) {
-			c2.modify(attrs,false);
-			return true;
-		}
-
-		/* check whether contact is already present - by fullname */
-		if ((c2 = contacts_by_fullname.get(_fullname(attrs))) != null) {
+		if ((c2 = contacts_by_email.get(attrs.get(A_email))) != null) {
+			modifyrecords++;
 			c2.modify(attrs,false);
 			return true;
 		}
 
 		/* contact not found, adding new one */
 		c2 = mbx.createContact(addrbook_id,null,attrs);
+		createrecords++;
 		contacts.add(c2);
 		contacts_by_email.put(_email(attrs), c2);
-		contacts_by_fullname.put(_fullname(attrs), c2);
 		return true;
 	}
 
+	public boolean deleteContact(String contactId,String folderId) throws ServiceException ,JSONException  {
+		ZSearchParams params = new ZSearchParams(contactId);
+		params.setTypes("contact");
+		params.setSortBy(ZMailbox.SearchSortBy.nameAsc);
+		List<ZSearchHit> zsearchhit = mbx.search(params).getHits();
+		if(zsearchhit.size()>0) {
+for(ZSearchHit zsh : zsearchhit) {
+				mbx.deleteContact(zsh.getId());
+				deleterecords++;
+			}
+		}
+		return true;
+	}
 	public static boolean parseFullNameToAttr(String value, Map<String, String> contact) {
 		if (StrUtil.isBlank(value))
 			return false;
@@ -113,5 +131,17 @@ public class ContactManager {
 			}
 		}
 		return true;
+	}
+
+	public int getModifycount() {
+		return modifyrecords;
+	}
+
+	public int getCreatecount() {
+		return createrecords;
+	}
+
+	public int getDeletecount() {
+		return deleterecords;
 	}
 }
