@@ -22,6 +22,7 @@ import com.zimbra.cs.zclient.ZMessage;
 import com.zimbra.cs.zclient.ZMessage.ZMimePart;
 import com.zimbra.cs.zclient.ZSearchHit;
 import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.cs.zclient.ZFolder;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -368,5 +369,13 @@ for(ZSearchHit res: result) {
 			ZLog.err("VNC Common", "ERROR in getFileContentByItemId",e);
 		}
 		return null;
+	}
+
+	public static void createTaskFolder(HttpServletRequest req,String foldername,String taskurl) throws ServiceException  {
+		getMailbox(req).createFolder("1",foldername,ZFolder.View.fromString("task"),ZFolder.Color.fromString("blue"),"",taskurl);
+	}
+
+	public static void createCalenderFolder(HttpServletRequest req,String foldername,String calendarurl) throws ServiceException {
+		getMailbox(req).createFolder("1",foldername,ZFolder.View.fromString("appointment"),ZFolder.Color.fromString("red"),"",calendarurl);
 	}
 }
