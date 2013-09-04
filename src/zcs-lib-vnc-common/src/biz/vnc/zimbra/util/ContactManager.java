@@ -25,10 +25,10 @@ public class ContactManager {
 	public static final String A_middleName = "middleName";
 	public static final String A_lastName = "lastName";
 	public static final String A_email = "email";
-	public static final String A_homeCity = "homeCity";
+	public static final String A_workCity = "workCity";
 	public static final String A_workStreet = "workStreet";
 	public static final String A_homeStreet = "homeStreet";
-	public static final String A_homePostalCode = "homePostalCode";
+	public static final String A_workPostalCode = "workPostalCode";
 	public static final String A_homePhone = "homePhone";
 	public static final String A_homeFax = "homeFax";
 	public static final String A_mobilePhone = "mobilePhone";
