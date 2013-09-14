@@ -56,6 +56,7 @@ public class JSPUtil {
 		r.setHeader("Cache-Control","no-cache");
 		r.setHeader("Pragma","no-cache");
 		r.setDateHeader("Expires", 0);
+		r.setContentType("text/javascript; charset=utf-8");
 	}
 
 	/* Reading authentication token from cookie */
