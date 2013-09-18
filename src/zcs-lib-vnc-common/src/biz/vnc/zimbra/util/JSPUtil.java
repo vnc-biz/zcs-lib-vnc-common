@@ -205,6 +205,7 @@ for(String userProperty : userProperties) {
 		conn.connect();
 		if(conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM || conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
 			conn = (HttpURLConnection) new URL(conn.getHeaderField("Location")).openConnection();
+			conn.setRequestProperty("Cookie","ZM_AUTH_TOKEN=" + getAuthToken(r));
 		}
 		return conn.getInputStream();
 	}
