@@ -384,4 +384,16 @@ for(ZSearchHit res: result) {
 	public static void createCalenderFolder(HttpServletRequest req,String foldername,String calendarurl) throws ServiceException {
 		getMailbox(req).createFolder("1",foldername,ZFolder.View.fromString("appointment"),ZFolder.Color.fromString("red"),"",calendarurl);
 	}
+
+	public static void setUserPassword(String username, String password) {
+		try {
+			Options options = new Options();
+			options.setLocalConfigAuth(true);
+			SoapProvisioning provisioning = new SoapProvisioning(options);
+			Account account = provisioning.getAccount(username);
+			account.setPassword(password);
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in setUserPassword",e);
+		}
+	}
 }
