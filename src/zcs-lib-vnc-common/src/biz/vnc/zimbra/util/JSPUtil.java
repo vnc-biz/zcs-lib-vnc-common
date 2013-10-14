@@ -385,15 +385,17 @@ for(ZSearchHit res: result) {
 		getMailbox(req).createFolder("1",foldername,ZFolder.View.fromString("appointment"),ZFolder.Color.fromString("red"),"",calendarurl);
 	}
 
-	public static void setUserPassword(String username, String password) {
+	public static void setInitialUserPassword(String username, String password) {
 		try {
 			Options options = new Options();
 			options.setLocalConfigAuth(true);
 			SoapProvisioning provisioning = new SoapProvisioning(options);
 			Account account = provisioning.getAccount(username);
 			account.setPassword(password);
+			account.setPasswordMustChange(true);
 		} catch(Exception e) {
 			ZLog.err("VNC Common", "ERROR in setUserPassword",e);
 		}
 	}
+
 }
