@@ -11,6 +11,9 @@ import java.lang.ClassNotFoundException;
 public class ProtectedZimletConfig {
 	private static final String table = "zcs_zimlet_user_config";
 
+	/** pseudo-username for global settings **/
+	private static final String global_username = "*";
+
 	static public Properties getUserProperties(String zimlet, String username) {
 		try {
 			Connection conn = LocalDB.connect(null);
@@ -95,5 +98,17 @@ public class ProtectedZimletConfig {
 		} catch (ClassNotFoundException e) {
 			ZLog.err("ProtectedZimletConfig", "class not found", e);
 		}
+	}
+
+	static public Properties getGlobalProperties(String zimlet) {
+		return getUserProperties(zimlet, global_username);
+	}
+
+	static public boolean setGlobalProperty(String zimlet, String property, String value) {
+		return setUserProperty(zimlet, global_username, property, value);
+	}
+
+	static public void clearGlobalProperties(String zimlet) {
+		clearUserProperties(zimlet, global_username);
 	}
 }
