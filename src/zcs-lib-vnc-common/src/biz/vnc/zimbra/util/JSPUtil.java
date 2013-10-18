@@ -48,7 +48,7 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONException;
-
+import com.zimbra.cs.service.AuthProvider;
 
 public class JSPUtil {
 	/* disable caching of the reply */
@@ -398,4 +398,36 @@ for(ZSearchHit res: result) {
 		}
 	}
 
+	public static ZMailbox getUserMailbox(String username) {
+		ZMailbox zmbox = null;
+		try {
+			Options options = new Options();
+			options.setLocalConfigAuth(true);
+			SoapProvisioning provisioning = new SoapProvisioning(options);
+			Account account = provisioning.getAccount(username);
+			if(account==null) {
+				return null;
+			}
+			AuthToken authToken  =  AuthProvider.getAuthToken(account,false);
+			ZMailbox.Options option = new ZMailbox.Options(authToken.toZAuthToken(), SoapProvisioning.getLocalConfigURI());
+			option.setNoSession(true);
+			zmbox = ZMailbox.getMailbox(option);
+			if(zmbox==null) {
+				return null;
+			}
+		} catch(Exception e) {
+			ZLog.err("VNC Common", "ERROR in getUserMailbox",e);
+			return null;
+		}
+		return zmbox;
+	}
+
+	public static MailInfo getUserMailInfo(String username, String msgid) throws ServiceException {
+		ZMailbox mbox = getUserMailbox(username);
+		ZGetMessageParams params = new ZGetMessageParams();
+		params.setId(msgid);
+		params.setWantHtml(true);
+		ZMessage msg = mbox.getMessage(params);
+		return new MailInfo(mbox, msg, msgid);
+	}
 }
