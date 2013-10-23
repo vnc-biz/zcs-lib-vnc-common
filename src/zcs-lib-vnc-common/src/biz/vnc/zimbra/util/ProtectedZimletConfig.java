@@ -111,4 +111,21 @@ public class ProtectedZimletConfig {
 	static public void clearGlobalProperties(String zimlet) {
 		clearUserProperties(zimlet, global_username);
 	}
+
+	static public void clearUserProperties(String zimlet, String username, String value) {
+		try {
+			Connection conn = LocalDB.connect(null);
+			{
+				PreparedStatement st = conn.prepareStatement("DELETE FROM "+table+" WHERE zimlet = ? AND username = ? AND value = ?");
+				st.setString(1, zimlet);
+				st.setString(2, username);
+				st.setString(3, value);
+				st.execute();
+			}
+		} catch (SQLException e) {
+			ZLog.err("ProtectedZimletConfig", "sqlexception", e);
+		} catch (ClassNotFoundException e) {
+			ZLog.err("ProtectedZimletConfig", "class not found", e);
+		}
+	}
 }
