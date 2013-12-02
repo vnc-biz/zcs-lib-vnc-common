@@ -260,6 +260,9 @@ for(String userProperty : userProperties) {
 		SoapProvisioning provisioning = new SoapProvisioning(options);
 		JsonObject resultData = new JsonObject();
 		account = provisioning.getAccount(userId);
+		if(account==null) {
+			return null;
+		}
 		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
 		String eAuthToken = authToken.getEncoded();
 		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
@@ -280,6 +283,9 @@ for(ZSearchHit res: result) {
 		options.setLocalConfigAuth(true);
 		SoapProvisioning provisioning = new SoapProvisioning(options);
 		account = provisioning.getAccount(userId);
+		if(account==null) {
+			return null;
+		}
 		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
 		String eAuthToken = authToken.getEncoded();
 		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
@@ -300,6 +306,9 @@ for(ZSearchHit res: result) {
 		options.setLocalConfigAuth(true);
 		SoapProvisioning provisioning = new SoapProvisioning(options);
 		account = provisioning.getAccount(userId);
+		if(account==null) {
+			return null;
+		}
 		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
 		String eAuthToken = authToken.getEncoded();
 		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
@@ -330,6 +339,9 @@ for(ZSearchHit res: result) {
 			options.setLocalConfigAuth(true);
 			SoapProvisioning provisioning = new SoapProvisioning(options);
 			account = provisioning.getAccount(userId);
+			if(account==null) {
+				return null;
+			}
 			ZimbraAuthToken authToken = new ZimbraAuthToken(account);
 			String eAuthToken = authToken.getEncoded();
 			ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
