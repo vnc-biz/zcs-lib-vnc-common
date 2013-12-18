@@ -15,6 +15,7 @@ import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning.Options;
 import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.util.AccountUtil;
+import com.zimbra.cs.zclient.ZContact;
 import com.zimbra.cs.zclient.ZGetMessageParams;
 import com.zimbra.cs.zclient.ZJSONObject;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -34,7 +35,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.Vector;
@@ -298,6 +301,38 @@ for(ZSearchHit res: result) {
 			allTaskResult.add(res.toZJSONObject().put("organizer", userId).toString());
 		}
 		return allTaskResult;
+	}
+
+	public static List<String> fetchContactByUser(String userId, String contactId) throws JSONException, AuthTokenException, ServiceException {
+		Account account = null;
+		Options options = new Options();
+		options.setLocalConfigAuth(true);
+		SoapProvisioning provisioning = new SoapProvisioning(options);
+		account = provisioning.getAccount(userId);
+		if(account==null) {
+			return null;
+		}
+		ZimbraAuthToken authToken = new ZimbraAuthToken(account);
+		String eAuthToken = authToken.getEncoded();
+		ZMailbox mailbox = ZMailbox.getByAuthToken(eAuthToken,SoapProvisioning.getLocalConfigURI());
+		ZSearchParams searchParam = new ZSearchParams("item:"+contactId);
+		searchParam.setTypes(ZSearchParams.TYPE_CONTACT);
+		searchParam.setTimeZone(TimeZone.getDefault());
+		List<ZSearchHit> result = mailbox.search(searchParam).getHits();
+		List<String> allContactResult = new ArrayList<String>();
+for(ZSearchHit res: result) {
+			ZContact contact = mailbox.getContact(res.getId().toString());
+			Map<String, String> cmap = contact.getAttrs();
+			Iterator iterator = cmap.entrySet().iterator();
+			ZJSONObject zjsonObject = new ZJSONObject();
+			zjsonObject = res.toZJSONObject();
+			while (iterator.hasNext()) {
+				Map.Entry mapEntry = (Map.Entry) iterator.next();
+				zjsonObject.put(mapEntry.getKey().toString(), mapEntry.getValue().toString());
+			}
+			allContactResult.add(zjsonObject.toString());
+		}
+		return allContactResult;
 	}
 
 	public static List<String> fetchMailByUser(String userId, String msgId) throws JSONException, AuthTokenException, ServiceException {
