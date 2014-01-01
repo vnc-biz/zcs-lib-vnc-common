@@ -20,6 +20,7 @@ import com.zimbra.cs.zclient.ZSearchHit;
 
 public class ContactManager {
 
+	public static final String A_partnerID = "Partner ID";
 	public static final String A_firstName = "firstName";
 	public static final String A_middleName = "middleName";
 	public static final String A_lastName = "lastName";
@@ -38,7 +39,7 @@ public class ContactManager {
 	private ZMailbox mbx;
 	private List<ZContact> contacts;
 	private String addrbook_id;
-	private HashMap<String, ZContact> contacts_by_email = new HashMap<String, ZContact>();
+	private HashMap<String, ZContact> contacts_by_partnerid = new HashMap<String, ZContact>();
 	private HashMap<String, ZContact> contacts_by_fullname = new HashMap<String, ZContact>();
 	public int createrecords = 0;
 	public int deleterecords = 0;
@@ -50,6 +51,10 @@ public class ContactManager {
 
 	private static String _email(Map<String,String> m) {
 		return m.get(A_email).trim();
+	}
+
+	private static String _partnerid(Map<String,String> m) {
+		return m.get(A_partnerID).trim();
 	}
 
 	/* FIXME: maybe the name ('firstName' + 'lastName' vs. 'Name') might be a bit bogus ... ;-o */
@@ -64,7 +69,7 @@ public class ContactManager {
 		for(int x=0; x<contacts.size(); x++) {
 			ZContact walk = contacts.get(x);
 			Map<String, String> localAttributes = walk.getAttrs();
-			contacts_by_email.put(_email(localAttributes), walk);
+			contacts_by_partnerid.put(_partnerid(localAttributes), walk);
 		}
 	}
 
@@ -73,8 +78,8 @@ public class ContactManager {
 
 		ZContact c2;
 
-		/* check whether contact is already present - by email */
-		if ((c2 = contacts_by_email.get(attrs.get(A_email))) != null) {
+		/* check whether contact is already present - by partneID */
+		if ((c2 = contacts_by_partnerid.get(attrs.get(A_partnerID).trim())) != null) {
 			modifyrecords++;
 			c2.modify(attrs,false);
 			return true;
@@ -84,7 +89,7 @@ public class ContactManager {
 		c2 = mbx.createContact(addrbook_id,null,attrs);
 		createrecords++;
 		contacts.add(c2);
-		contacts_by_email.put(_email(attrs), c2);
+		contacts_by_partnerid.put(_partnerid(attrs), c2);
 		return true;
 	}
 
